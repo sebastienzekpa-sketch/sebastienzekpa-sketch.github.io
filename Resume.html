@@ -1,0 +1,1197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Sebastien Zekpa · Resume</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="assets/nveil.css" />
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg-night); color: var(--fg-1); }
+  body {
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- Page shell ---------- */
+  .page {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 56px 56px 96px;
+    position: relative;
+  }
+  .page::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: var(--gradient-bg-glow);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .page > * { position: relative; z-index: 1; }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-1);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand img { width: 28px; height: 28px; }
+  .brand .wm { font-family: var(--font-display); font-weight: 600; letter-spacing: 0.04em; font-size: 18px; }
+  .topbar .meta {
+    display: flex; gap: 28px; font-family: var(--font-mono); font-size: 11px;
+    color: var(--fg-3); text-transform: uppercase; letter-spacing: var(--ls-wider);
+  }
+  .topbar .meta span b { color: var(--fg-1); font-weight: 500; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 56px;
+    padding: 72px 0 56px;
+    align-items: end;
+  }
+  .hero .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--fg-3);
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 28px;
+  }
+  .hero .eyebrow .dot {
+    width: 8px; height: 8px; border-radius: 999px; background: var(--success);
+    box-shadow: 0 0 12px var(--success);
+    animation: pulse 2s var(--ease-out) infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0.45; } }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(72px, 10vw, 144px);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    margin: 0 0 24px;
+    color: var(--fg-1);
+  }
+  .hero h1 .last {
+    color: var(--fg-1);
+    display: inline-block;
+    font-style: italic;
+    font-weight: 400;
+  }
+  @keyframes shift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  .hero .role {
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--fg-2);
+    max-width: 640px;
+    text-wrap: balance;
+  }
+  .hero .role b { color: var(--fg-1); font-weight: 500; }
+
+  .hero-portrait {
+    aspect-ratio: 4/5;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    border: 1px solid var(--border-2);
+    box-shadow: var(--shadow-3), var(--shadow-glow-pink);
+    position: relative;
+    background: var(--bg-elevated);
+  }
+  .hero-portrait img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: saturate(0.85) contrast(1.05);
+    mix-blend-mode: luminosity;
+  }
+  .hero-portrait::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(28,24,53,0.7));
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+  .hero-portrait .tag {
+    position: absolute; left: 16px; bottom: 16px;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: var(--ls-wider); text-transform: uppercase;
+    color: var(--fg-1);
+    background: rgba(12,10,28,0.55);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-2);
+    padding: 6px 10px; border-radius: 999px;
+    z-index: 2;
+  }
+
+  /* ---------- Contact strip ---------- */
+  .contacts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 16px 0;
+    margin: 24px 0 56px;
+    border-top: 1px solid var(--border-1);
+    border-bottom: 1px solid var(--border-1);
+  }
+  .contact {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    transition: background var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--fg-2);
+  }
+  .contact:hover { background: rgba(255,255,255,0.04); color: var(--fg-1); transform: translateY(-1px); }
+  .contact .lab { color: var(--fg-3); font-size: 9.5px; letter-spacing: var(--ls-wider); text-transform: uppercase; display: block; margin-bottom: 2px; }
+  .contact .val { font-size: 13px; font-weight: 500; color: var(--fg-1); font-family: var(--font-display); letter-spacing: -0.01em; }
+  .contact i { width: 18px; height: 18px; color: var(--accent-pink); flex-shrink: 0; }
+  .contact .body { min-width: 0; overflow: hidden; }
+  .contact .val { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ---------- Section heads ---------- */
+  .section { padding: 56px 0; border-top: 1px solid var(--border-1); }
+  .section-head {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 56px;
+    margin-bottom: 32px;
+    align-items: baseline;
+  }
+  .section-num {
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase;
+    color: var(--fg-3);
+  }
+  .section-num b { display:block; color: var(--fg-1); font-size: 36px; font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; margin-top: 6px; }
+  .section h2 {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin: 0;
+    color: var(--fg-1);
+  }
+  .section h2 em {
+    font-style: italic; font-weight: 300;
+    color: var(--fg-1);
+  }
+
+  /* ---------- About column block ---------- */
+  .about {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 56px;
+  }
+  .about p {
+    font-family: var(--font-display);
+    font-size: 17px; line-height: 1.55; color: var(--fg-2);
+    margin: 0 0 16px;
+    text-wrap: pretty;
+  }
+  .about p.lead {
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--fg-1);
+    font-weight: 400;
+    grid-column: 2 / span 2;
+    margin-bottom: 24px;
+    text-wrap: balance;
+  }
+  .about .col p:first-of-type { margin-top: 0; }
+
+  /* ---------- Experience timeline ---------- */
+  .timeline {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 56px;
+  }
+  .timeline-list { display: flex; flex-direction: column; gap: 0; }
+  .job {
+    display: grid;
+    grid-template-columns: 200px 1fr 100px;
+    gap: 32px;
+    padding: 32px 0;
+    border-top: 1px solid var(--border-1);
+    align-items: baseline;
+    transition: background var(--dur-base) var(--ease-out);
+  }
+  .job:first-child { border-top: 1px solid var(--border-2); }
+  .job:hover { background: linear-gradient(90deg, rgba(229,31,128,0.04), transparent 70%); }
+  .job-when {
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase;
+    color: var(--fg-3);
+  }
+  .job-when b { display:block; color: var(--fg-1); font-family: var(--font-display); font-size: 18px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 4px; text-transform: none; }
+  .job-body h3 {
+    font-family: var(--font-display);
+    font-size: 30px; font-weight: 500;
+    letter-spacing: -0.02em; line-height: 1.1;
+    margin: 0 0 6px;
+    color: var(--fg-1);
+  }
+  .job-body h3 .at { color: var(--fg-3); font-style: italic; font-weight: 300; }
+  .job-body h3 .at b { color: var(--fg-1); font-style: normal; font-weight: 600; }
+  .job-body .where { font-family: var(--font-mono); font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); margin-bottom: 14px; }
+  .job-body p { font-size: 15px; color: var(--fg-2); line-height: 1.6; margin: 0 0 12px; max-width: 680px; }
+  .job-body ul { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .job-body ul li {
+    font-size: 14px; color: var(--fg-2); line-height: 1.55;
+    padding-left: 20px; position: relative;
+  }
+  .job-body ul li::before {
+    content: ""; position: absolute; left: 0; top: 9px;
+    width: 8px; height: 1px; background: var(--accent-pink);
+  }
+  .job-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .tag {
+    font-family: var(--font-mono); font-size: 10.5px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 4px 9px; border: 1px solid var(--border-1);
+    border-radius: 999px; color: var(--fg-3);
+    background: rgba(255,255,255,0.02);
+  }
+  .job-link {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: var(--ls-wider); text-transform: uppercase;
+    color: var(--fg-3);
+    display: inline-flex; align-items: center; gap: 6px;
+    justify-self: end;
+    transition: color var(--dur-base);
+  }
+  .job-link:hover { color: var(--accent-pink); }
+  .job-link i { width: 12px; height: 12px; }
+
+  /* ---------- Sidebar grid (skills, langs, certs) ---------- */
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 200px repeat(3, 1fr);
+    gap: 32px;
+  }
+  .panel {
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    background: rgba(255,255,255,0.02);
+    transition: border-color var(--dur-base), background var(--dur-base);
+  }
+  .panel:hover { border-color: var(--border-accent); background: rgba(229,31,128,0.04); }
+  .panel h4 {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: var(--ls-wider); text-transform: uppercase;
+    color: var(--fg-3); margin: 0 0 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .panel h4 .num { color: var(--accent-pink); font-weight: 600; }
+
+  .skill-row { display: flex; flex-direction: column; gap: 12px; }
+  .skill {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--font-display); font-size: 15px; color: var(--fg-1);
+  }
+  .skill .bar {
+    flex: 1; height: 4px; border-radius: 2px;
+    background: rgba(255,255,255,0.06);
+    overflow: hidden;
+    position: relative;
+  }
+  .skill .bar i {
+    display: block; height: 100%; border-radius: 2px;
+    background: var(--gradient-spectrum-h);
+    animation: bar-grow 1.4s var(--ease-out) backwards;
+  }
+  @keyframes bar-grow { from { width: 0 !important; } }
+
+  .lang-list { display: flex; flex-direction: column; gap: 14px; }
+  .lang { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .lang .name { font-family: var(--font-display); font-size: 15px; color: var(--fg-1); font-weight: 500; }
+  .lang .lvl { display: flex; gap: 4px; }
+  .lang .lvl span {
+    width: 10px; height: 10px; border-radius: 2px;
+    background: rgba(255,255,255,0.08);
+  }
+  .lang .lvl span.on { background: var(--accent-pink); box-shadow: 0 0 6px rgba(229,31,128,0.5); }
+  .lang .lvl span.on.y { background: var(--accent-yellow); box-shadow: 0 0 6px rgba(246,215,81,0.4); }
+
+  .cert-list { display: flex; flex-direction: column; gap: 12px; }
+  .cert {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-family: var(--font-display); font-size: 14px; color: var(--fg-1);
+    line-height: 1.4;
+  }
+  .cert .ico {
+    flex-shrink: 0;
+    width: 24px; height: 24px; border-radius: 6px;
+    display: grid; place-items: center;
+    background: rgba(229,31,128,0.12);
+    border: 1px solid var(--border-accent);
+  }
+  .cert .ico i { width: 12px; height: 12px; color: var(--accent-pink); }
+  .cert b { display: block; color: var(--fg-1); }
+  .cert span { color: var(--fg-3); font-size: 12px; font-family: var(--font-mono); letter-spacing: 0.02em; }
+
+  /* ---------- Education ---------- */
+  .edu-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 56px;
+  }
+  .edu-list { display: flex; flex-direction: column; }
+  .edu {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border-1);
+    align-items: baseline;
+  }
+  .edu:first-child { border-top: 1px solid var(--border-2); }
+  .edu h3 { font-family: var(--font-display); font-size: 22px; font-weight: 500; letter-spacing: -0.01em; margin: 0 0 4px; color: var(--fg-1); }
+  .edu .deg { font-size: 14px; color: var(--fg-2); }
+  .edu .deg em { color: var(--accent-pink); font-style: normal; }
+  .edu .yr { font-family: var(--font-mono); font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); white-space: nowrap; }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    margin-top: 96px;
+    padding: 48px 0 0;
+    border-top: 1px solid var(--border-1);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: end;
+  }
+  .footer h2 {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 6vw, 88px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    margin: 0;
+  }
+  .footer h2 em { font-style: italic; font-weight: 300; color: var(--fg-1); }
+  .footer h2 b {
+    color: var(--fg-1);
+    font-weight: 500;
+  }
+  .footer .actions { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
+  .cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 24px; border-radius: 999px;
+    background: var(--primary);
+    color: var(--primary-fg);
+    font-family: var(--font-display);
+    font-weight: 500; font-size: 16px;
+    letter-spacing: -0.01em;
+    box-shadow: var(--shadow-glow-pink);
+    transition: transform var(--dur-base) var(--ease-out), background var(--dur-base);
+  }
+  .cta:hover { background: var(--primary-hover); transform: translateY(-2px); }
+  .cta i { width: 18px; height: 18px; }
+  .cta-ghost {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px; border-radius: 999px;
+    border: 1px solid var(--border-2);
+    color: var(--fg-1);
+    font-family: var(--font-mono); font-size: 12px;
+    letter-spacing: var(--ls-wider); text-transform: uppercase;
+    transition: border-color var(--dur-base), background var(--dur-base);
+  }
+  .cta-ghost:hover { border-color: var(--accent-pink); background: rgba(229,31,128,0.06); }
+
+  .colophon {
+    margin-top: 64px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: var(--ls-wider); text-transform: uppercase;
+    color: var(--fg-4);
+  }
+
+  /* ---------- The big spectrum bar ---------- */
+  .spectrum-bar {
+    height: 4px; border-radius: 2px; margin: 8px 0 0;
+    background: var(--gradient-spectrum-h);
+    background-size: 200% 100%;
+    animation: shift 12s linear infinite;
+  }
+
+  /* ---------- Marquee ---------- */
+  .marquee {
+    overflow: hidden;
+    border-top: 1px solid var(--border-1);
+    border-bottom: 1px solid var(--border-1);
+    padding: 18px 0;
+    margin: 32px -56px 0;
+    mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee-track {
+    display: flex; gap: 48px;
+    width: max-content;
+    animation: marquee 40s linear infinite;
+    font-family: var(--font-display); font-size: 24px; font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--fg-2);
+  }
+  .marquee-track .star {
+    color: var(--accent-pink); font-size: 18px;
+    display: inline-flex; align-items: center;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ---------- Pyramid mark animated ---------- */
+  .pyramid-svg {
+    width: 100%; aspect-ratio: 1;
+    display: block;
+  }
+
+  /* ---------- Print ---------- */
+  @page { size: A4; margin: 14mm 12mm; }
+  @media print {
+    html, body {
+      background: #14112a !important;
+      color: #ffffff !important;
+      overflow: visible !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    body { font-size: 10.5pt; }
+
+    /* Kill animations & decorative layers */
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+    }
+    .page::before,
+    .marquee,
+    .footer .actions,
+    .colophon,
+    .hero .eyebrow .dot,
+    .spectrum-bar { display: none !important; }
+
+    /* Page reset */
+    .page {
+      max-width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      background: #14112a !important;
+    }
+
+    /* FORCE EVERYTHING WHITE */
+    .page, .page *,
+    h1, h2, h3, h4, h5, h6, p, span, b, em, i, li, a, div {
+      color: #ffffff !important;
+    }
+
+    a { text-decoration: none !important; }
+
+    /* Hero */
+    .topbar { padding-bottom: 8mm; border-color: rgba(255,255,255,0.25) !important; }
+    .hero {
+      grid-template-columns: 1fr 110px !important;
+      gap: 10mm !important;
+      padding: 8mm 0 6mm !important;
+    }
+    .hero h1 {
+      font-size: 48pt !important;
+      line-height: 0.95 !important;
+      margin-bottom: 4mm !important;
+    }
+    .hero .role { font-size: 11pt !important; }
+    .hero .eyebrow { margin-bottom: 4mm !important; }
+    .hero-portrait {
+      border: 1px solid rgba(255,255,255,0.25) !important;
+      border-radius: 6pt !important;
+    }
+    .hero-portrait img { mix-blend-mode: normal !important; filter: none !important; }
+    .hero-portrait::after { display: none !important; }
+    .hero-portrait .tag {
+      background: rgba(0,0,0,0.4) !important;
+      border-color: rgba(255,255,255,0.3) !important;
+    }
+
+    /* Contacts */
+    .contacts {
+      grid-template-columns: repeat(4, 1fr) !important;
+      margin: 4mm 0 6mm !important;
+      padding: 3mm 0 !important;
+      border-color: rgba(255,255,255,0.25) !important;
+    }
+    .contact { padding: 1mm 2mm !important; }
+    .contact .val { font-size: 9pt !important; }
+    .contact i { color: #e51f80 !important; }
+
+    /* Sections */
+    .section {
+      padding: 6mm 0 !important;
+      border-top: 1px solid rgba(255,255,255,0.25) !important;
+      page-break-inside: auto;
+    }
+    .section-head { margin-bottom: 4mm !important; gap: 8mm !important; }
+    .section-num b { font-size: 18pt !important; }
+    .section h2 { font-size: 24pt !important; }
+
+    .about p.lead { font-size: 13pt !important; }
+
+    /* Experience */
+    .job {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      padding: 4mm 0 !important;
+      gap: 6mm !important;
+      border-color: rgba(255,255,255,0.18) !important;
+    }
+    .job:hover { background: transparent !important; }
+    .job-body h3 { font-size: 14pt !important; }
+    .job-body p, .job-body ul li { font-size: 10pt !important; }
+    .job-body ul li::before { background: #e51f80 !important; }
+    .tag {
+      background: rgba(255,255,255,0.04) !important;
+      border-color: rgba(255,255,255,0.25) !important;
+    }
+
+    /* Toolkit panels */
+    .grid-3 { gap: 6mm !important; }
+    .panel {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      background: rgba(255,255,255,0.04) !important;
+      border-color: rgba(255,255,255,0.2) !important;
+      padding: 4mm !important;
+    }
+    .panel h4 .num { color: #e51f80 !important; }
+    .skill { font-size: 9.5pt !important; }
+    .skill .bar { background: rgba(255,255,255,0.12) !important; }
+    .skill .bar i { background: #e51f80 !important; }
+    .lang .lvl span { background: rgba(255,255,255,0.15) !important; }
+    .lang .lvl span.on { background: #e51f80 !important; }
+    .lang .lvl span.on.y { background: #f49f49 !important; }
+    .cert .ico {
+      background: rgba(229,31,128,0.18) !important;
+      border-color: rgba(229,31,128,0.4) !important;
+    }
+    .cert .ico i { color: #e51f80 !important; }
+
+    /* Education */
+    .edu {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      padding: 3mm 0 !important;
+      border-color: rgba(255,255,255,0.18) !important;
+    }
+    .edu h3 { font-size: 12pt !important; }
+    .edu .deg em { color: #e51f80 !important; }
+
+    /* Footer */
+    .footer {
+      margin-top: 8mm !important;
+      padding-top: 6mm !important;
+      grid-template-columns: 1fr !important;
+      border-color: rgba(255,255,255,0.25) !important;
+      page-break-before: avoid;
+    }
+    .footer h2 { font-size: 28pt !important; }
+  }
+
+  @media (max-width: 900px) {
+    .page { padding: 32px 24px 64px; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-portrait { max-width: 320px; }
+    .contacts { grid-template-columns: repeat(2, 1fr); }
+    .section-head, .about, .timeline, .grid-3, .edu-grid { grid-template-columns: 1fr; gap: 24px; }
+    .job { grid-template-columns: 1fr; }
+    .footer { grid-template-columns: 1fr; }
+    .footer .actions { align-items: flex-start; }
+  }
+  /* ---------- Hover magnify: lift & scale sections under cursor ---------- */
+  .job,
+  .edu,
+  .panel,
+  .about,
+  .footer {
+    transition:
+      background var(--dur-base) var(--ease-out),
+      transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      filter 320ms ease-out,
+      z-index 0s linear 320ms;
+    transform-origin: left center;
+    will-change: transform;
+    position: relative;
+  }
+  .job:hover,
+  .edu:hover,
+  .panel:hover,
+  .about:hover {
+    transform: scale(1.14);
+    z-index: 50;
+    box-shadow:
+      0 30px 60px -15px rgba(0, 0, 0, 0.55),
+      0 0 0 1px rgba(229, 31, 128, 0.3),
+      0 -10px 60px -20px rgba(229, 31, 128, 0.25);
+    background: linear-gradient(135deg, rgba(229,31,128,0.08), rgba(28,24,53,0.85)) !important;
+    border-radius: 16px;
+    transition:
+      transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      background 320ms ease-out,
+      z-index 0s linear 0s;
+  }
+  /* Make hovered children even more readable: bump font sizes slightly */
+  .job:hover .job-body p,
+  .job:hover .job-body ul li {
+    font-size: 17px !important;
+    line-height: 1.7 !important;
+  }
+  .job:hover .job-body h3 {
+    font-size: 34px !important;
+  }
+  .edu:hover h3 { font-size: 28px !important; }
+  .edu:hover .deg { font-size: 17px !important; }
+  /* Dim siblings of hovered job for focus */
+  .timeline-list:hover .job:not(:hover) {
+    filter: brightness(0.55) saturate(0.7);
+  }
+  .edu-grid:hover .edu:not(:hover) {
+    filter: brightness(0.6) saturate(0.7);
+  }
+  /* Disable on touch / coarse pointers + reduced motion */
+  @media (hover: none), (prefers-reduced-motion: reduce) {
+    .job:hover,
+    .edu:hover,
+    .panel:hover,
+    .about:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    .timeline-list:hover .job:not(:hover),
+    .edu-grid:hover .edu:not(:hover) {
+      filter: none;
+    }
+  }
+  /* Targets paragraphs, list items, captions, and small mono labels.
+     Excludes the very small uppercase labels and section numbers that
+     intentionally use muted color, plus bars/dots/icons. */
+  .hero .role,
+  .hero .role b,
+  .about p,
+  .about .lead,
+  .job-body p,
+  .job-body ul li,
+  .edu .deg,
+  .edu h3,
+  .skill,
+  .skill .label,
+  .lang .name,
+  .cert,
+  .cert b,
+  .cert span,
+  .contact .val,
+  .contact .lab,
+  .topbar .meta,
+  .topbar .meta span b,
+  .job-when,
+  .job-when b,
+  .job-body h3,
+  .job-body h3 .at,
+  .job-body h3 .at b,
+  .job-body .where,
+  .footer h2,
+  .footer h2 em,
+  .footer h2 b,
+  .marquee-track .item,
+  .section-num,
+  .section-num b,
+  .section h2,
+  .section h2 em,
+  .eyebrow,
+  .edu .yr,
+  .job-tags .tag,
+  .panel-title {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+  }
+  /* Italic spans should stay italic but white */
+  .hero h1 .last,
+  .section h2 em,
+  .footer h2 em,
+  .job-body h3 .at,
+  .edu .deg em {
+    color: #ffffff !important;
+  }
+  /* Keep accent pink visible on icons + bullets + active accents */
+  .contact i,
+  .cert .ico i,
+  .skill .bar > span,
+  .lang .lvl span.on,
+  .job-body ul li::before {
+    /* untouched */
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/nveil-mark.svg" alt="Nveil" />
+      <span class="wm">NVEIL</span>
+    </div>
+    <div class="meta">
+      <span><b>FILE</b> · résumé / sz.2026</span>
+      <span><b>VER</b> · v04.30</span>
+      <span><b>FR / EN</b></span>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div class="eyebrow">
+        <span class="dot"></span>
+        Curriculum vitae · “The best way to predict the future is to create it.” · Peter Drucker
+      </div>
+      <h1><span class="last">Sebastien</span><br/><span class="last">Zekpa</span></h1>
+      <p class="role">
+        <b>CEO &amp; Founder of Nveil.</b> AI &amp; deeptech advocate. Building the bridge between raw data and real understanding. From <b>0 to 1</b>, with <b>10+ years</b> in enterprise SaaS before going all-in.
+      </p>
+      <div class="spectrum-bar"></div>
+    </div>
+    <div class="hero-portrait">
+      <img src="assets/sebastien.jpg" alt="Sebastien Zekpa" onerror="this.style.display='none'" />
+      <span class="tag">● Grenoble · FR</span>
+    </div>
+  </section>
+
+  <!-- CONTACTS -->
+  <nav class="contacts" aria-label="Contact">
+    <a class="contact" href="mailto:ozultd@hotmail.com">
+      <i data-lucide="mail"></i>
+      <span class="body">
+        <span class="lab">Email</span>
+        <span class="val">ozultd@hotmail.com</span>
+      </span>
+    </a>
+    <a class="contact" href="https://www.linkedin.com/in/sebastienzekpa" target="_blank" rel="noopener">
+      <i data-lucide="linkedin-2"></i>
+      <span class="body">
+        <span class="lab">LinkedIn</span>
+        <span class="val">/in/sebastienzekpa</span>
+      </span>
+    </a>
+    <a class="contact" href="https://nveil.com" target="_blank" rel="noopener">
+      <i data-lucide="globe"></i>
+      <span class="body">
+        <span class="lab">Company</span>
+        <span class="val">nveil.com</span>
+      </span>
+    </a>
+    <a class="contact" href="https://maps.google.com/?q=Grenoble" target="_blank" rel="noopener">
+      <i data-lucide="map-pin"></i>
+      <span class="body">
+        <span class="lab">Based in</span>
+        <span class="val">Grenoble, France</span>
+      </span>
+    </a>
+  </nav>
+
+  <!-- ABOUT -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-num">Section · 01<b>About</b></div>
+      <h2>What I do, <em>distilled.</em></h2>
+    </div>
+    <div class="about">
+      <div></div>
+      <p class="lead">
+        I fundraise, recruit, and scale high-impact deeptech ventures, from non-dilutive grants to VC rounds and public funds, and represent them where it matters.
+      </p>
+      <div class="col">
+        <p>Build from <em style="color:var(--accent-pink); font-style: normal;">0 → 1</em>: GTM strategy, partner channels, product–market fit, founding team.</p>
+        <p>Recruit and lead cross-functional sales and technical teams across EMEA and North America.</p>
+      </div>
+      <div class="col">
+        <p>Pitch to investors, engage C-level stakeholders, secure strategic accounts in regulated industries.</p>
+        <p>Speaker at <b style="color:var(--fg-1)">VivaTech</b> and <b style="color:var(--fg-1)">Go Entrepreneurs</b>. Active contributor across the EMEA startup ecosystem.</p>
+      </div>
+    </div>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Fundraising</span><span class="star">◆</span>
+        <span>Deeptech</span><span class="star">◆</span>
+        <span>AI &amp; Data Visualization</span><span class="star">◆</span>
+        <span>Enterprise SaaS</span><span class="star">◆</span>
+        <span>GTM Strategy</span><span class="star">◆</span>
+        <span>Hiring &amp; Scaling</span><span class="star">◆</span>
+        <span>Investor Relations</span><span class="star">◆</span>
+        <span>Pharma &amp; Life Sciences</span><span class="star">◆</span>
+        <!-- duplicate -->
+        <span>Fundraising</span><span class="star">◆</span>
+        <span>Deeptech</span><span class="star">◆</span>
+        <span>AI &amp; Data Visualization</span><span class="star">◆</span>
+        <span>Enterprise SaaS</span><span class="star">◆</span>
+        <span>GTM Strategy</span><span class="star">◆</span>
+        <span>Hiring &amp; Scaling</span><span class="star">◆</span>
+        <span>Investor Relations</span><span class="star">◆</span>
+        <span>Pharma &amp; Life Sciences</span><span class="star">◆</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-num">Section · 02<b>Experience</b></div>
+      <h2>Where I've <em>built &amp; sold.</em></h2>
+    </div>
+
+    <div class="timeline-list">
+
+      <article class="job">
+        <div class="job-when">
+          <b>Dec 2023 · Now</b>
+          2 yrs 5 mo · Current
+        </div>
+        <div class="job-body">
+          <h3>Chief Executive Officer <span class="at">at <b>Nveil</b></span></h3>
+          <div class="where">Grenoble, France · Founder</div>
+          <p>Founded Nveil to solve the gap between raw data and real understanding. An AI platform that generates interactive 3D visualizations from any dataset, with no code, no configuration, no training.</p>
+          <ul>
+            <li>Raised pre-seed funding and built the founding team in Grenoble.</li>
+            <li>Took the platform from concept to live product, serving data leaders in pharma, life sciences, and regulated industries.</li>
+            <li>Building enterprise pipeline across EMEA and the US, with early traction in pharma.</li>
+            <li>Speaker at Go Entrepreneurs Lyon 2025 and Institut Carnot LSI; accepted into French deeptech innovation programs.</li>
+            <li>Lead product, go-to-market, fundraising, and hiring.</li>
+          </ul>
+          <div class="job-tags">
+            <span class="tag">Fundraising</span>
+            <span class="tag">Deeptech</span>
+            <span class="tag">Product</span>
+            <span class="tag">GTM</span>
+            <span class="tag">Hiring</span>
+            <span class="tag">NVIDIA Inception</span>
+            <span class="tag">Google for Startups</span>
+            <span class="tag">Minalogic</span>
+          </div>
+        </div>
+        <a class="job-link" href="https://nveil.com" target="_blank" rel="noopener">
+          Visit <i data-lucide="arrow-up-right"></i>
+        </a>
+      </article>
+
+      <article class="job">
+        <div class="job-when">
+          <b>Apr 2022 · Nov 2023</b>
+          1 yr 8 mo
+        </div>
+        <div class="job-body">
+          <h3>Regional Sales Manager <span class="at">at <b>BigID</b></span></h3>
+          <div class="where">Southern Europe · France · Italy · Iberia · Greece</div>
+          <p>Enterprise SaaS sales. Big Data discovery, security, governance, and privacy across financial services, retail, oil &amp; gas, and telecommunications.</p>
+          <ul>
+            <li>Owned territory quota, ACV, TCV, new logos, renewals and upsells across Southern Europe.</li>
+            <li>Built pipeline through SDR teams, events, marketing budget, and outbound campaigns.</li>
+            <li>Recruited and enabled resellers; led joint marketing and account mapping.</li>
+            <li>Leveraged investor and VC networks to identify new opportunities. MEDDICC sales methodology.</li>
+          </ul>
+          <div class="job-tags">
+            <span class="tag">Enterprise SaaS</span>
+            <span class="tag">Data Privacy</span>
+            <span class="tag">Channel</span>
+            <span class="tag">MEDDICC</span>
+          </div>
+        </div>
+        <a class="job-link" href="https://bigid.com" target="_blank" rel="noopener">Visit <i data-lucide="arrow-up-right"></i></a>
+      </article>
+
+      <article class="job">
+        <div class="job-when">
+          <b>Jun 2021 · Mar 2022</b>
+          10 mo
+        </div>
+        <div class="job-body">
+          <h3>Senior Sales Manager, Southern Europe <span class="at">at <b>Pluralsight</b></span></h3>
+          <div class="where">Dublin, Ireland</div>
+          <p>Managed a team of 6 senior account executives and account managers covering France, Italy, Spain and Portugal: new business, expansion, and renewals.</p>
+          <ul>
+            <li>Hired, onboarded, and retained top sales talent.</li>
+            <li>Owned daily and weekly activity, pipeline, forecast, and marketing alignment.</li>
+            <li>Mentored and coached senior reps through complex enterprise cycles.</li>
+          </ul>
+          <div class="job-tags">
+            <span class="tag">Team Leadership</span>
+            <span class="tag">Coaching</span>
+            <span class="tag">Forecasting</span>
+          </div>
+        </div>
+        <a class="job-link" href="https://pluralsight.com" target="_blank" rel="noopener">Visit <i data-lucide="arrow-up-right"></i></a>
+      </article>
+
+      <article class="job">
+        <div class="job-when">
+          <b>Aug 2015 · Jun 2021</b>
+          5 yrs 11 mo
+        </div>
+        <div class="job-body">
+          <h3>Sales Specialist &amp; Team Lead, EMEA Cybersecurity <span class="at">at <b>IBM</b></span></h3>
+          <div class="where">Dublin, Ireland · French market &amp; EU lead</div>
+          <p>Three roles across nearly six years: from Business Developer to Account Manager to Sales Specialist &amp; Europe Team Lead for IBM Security.</p>
+          <ul>
+            <li><b style="color:var(--fg-1)">Sales Specialist French Market &amp; Team Leader Europe Cyber Security</b>: SaaS, cloud and on-prem; SIEM, vulnerability management, IAM, MDM/UEM. Led France, SPGI, Benelux, Nordics, Italy, CEE.</li>
+            <li><b style="color:var(--fg-1)">Account Manager · IBM MaaS360 (France)</b>: owned client retention, renewals, and expansion across the French SaaS portfolio.</li>
+            <li><b style="color:var(--fg-1)">Business Developer · French market</b>: IBM Global Technology Services entry point for French enterprise accounts.</li>
+          </ul>
+          <div class="job-tags">
+            <span class="tag">Cybersecurity</span>
+            <span class="tag">SIEM</span>
+            <span class="tag">IAM</span>
+            <span class="tag">Team Leadership</span>
+            <span class="tag">EMEA</span>
+          </div>
+        </div>
+        <a class="job-link" href="https://ibm.com" target="_blank" rel="noopener">Visit <i data-lucide="arrow-up-right"></i></a>
+      </article>
+
+      <article class="job">
+        <div class="job-when">
+          <b>Nov 2014 · Sep 2015</b>
+          11 mo
+        </div>
+        <div class="job-body">
+          <h3>Founder <span class="at">at <b>Eglobaltalent</b></span></h3>
+          <div class="where">Dublin, Ireland</div>
+          <p>Recruitment services for SMBs and large businesses across real estate, telecom, e-commerce, financial services, languages, and sales.</p>
+          <div class="job-tags">
+            <span class="tag">First Founding</span>
+            <span class="tag">Recruitment</span>
+            <span class="tag">B2B Services</span>
+          </div>
+        </div>
+        <a class="job-link" href="#"><i data-lucide="briefcase"></i></a>
+      </article>
+
+      <article class="job">
+        <div class="job-when">
+          <b>Sep 2012 · Sep 2014</b>
+          2 yrs 1 mo
+        </div>
+        <div class="job-body">
+          <h3>Consultant &amp; Business Developer EMEA <span class="at">at <b>Md7</b></span></h3>
+          <div class="where">EMEA · Wireless &amp; wireline real estate</div>
+          <p>Helped operators reduce costs and improve the quality of cell-site leases. 90% C-level presentations, NDA / RFT / contract negotiation, OPEX/CAPEX reduction expertise (NPV, payback, DCF). Portfolio of 300+ leases.</p>
+          <div class="job-tags">
+            <span class="tag">C-Level Negotiation</span>
+            <span class="tag">SaaS Demos</span>
+            <span class="tag">Financial Modeling</span>
+          </div>
+        </div>
+        <a class="job-link" href="#"><i data-lucide="line-chart"></i></a>
+      </article>
+
+      <article class="job">
+        <div class="job-when">
+          <b>Nov 2011 · Sep 2012</b>
+          11 mo
+        </div>
+        <div class="job-body">
+          <h3>Risk Operations Agent · Financial Crime <span class="at">at <b>PayPal</b></span></h3>
+          <div class="where">Dublin, Ireland</div>
+          <p>Verified merchant activity and mitigated loss across change-in-business-model and merchandise risk. Reviewed seller KPIs, transaction trends, KYC/KYB. Managed chargebacks, unauthorised transactions, AML &amp; SAR reporting.</p>
+          <div class="job-tags">
+            <span class="tag">AML</span>
+            <span class="tag">KYC / KYB</span>
+            <span class="tag">Risk</span>
+          </div>
+        </div>
+        <a class="job-link" href="#"><i data-lucide="shield"></i></a>
+      </article>
+
+      <article class="job">
+        <div class="job-when">
+          <b>Jun 2009 · Sep 2009</b>
+          4 mo · Internship
+        </div>
+        <div class="job-body">
+          <h3>Credit Controller <span class="at">at <b>BNP Paribas</b></span></h3>
+          <div class="where">France</div>
+          <p>Identified risk situations and implemented credit solutions. Financial valuation of entities; presented recommendations to credit committee.</p>
+          <div class="job-tags">
+            <span class="tag">Credit Risk</span>
+            <span class="tag">Valuation</span>
+          </div>
+        </div>
+        <a class="job-link" href="#"><i data-lucide="banknote"></i></a>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- SKILLS / LANGUAGES / CERTS -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-num">Section · 03<b>Toolkit</b></div>
+      <h2>Skills, languages, <em>credentials.</em></h2>
+    </div>
+
+    <div class="grid-3">
+      <div></div>
+
+      <div class="panel">
+        <h4>Core skills <span class="num">04</span></h4>
+        <div class="skill-row">
+          <div class="skill"><span style="min-width:130px;">Start-up Leadership</span><div class="bar"><i style="width:96%;"></i></div></div>
+          <div class="skill"><span style="min-width:130px;">Fundraising</span><div class="bar"><i style="width:92%; animation-delay: .1s;"></i></div></div>
+          <div class="skill"><span style="min-width:130px;">GTM &amp; Sales</span><div class="bar"><i style="width:95%; animation-delay: .2s;"></i></div></div>
+          <div class="skill"><span style="min-width:130px;">Data Viz / AI</span><div class="bar"><i style="width:85%; animation-delay: .3s;"></i></div></div>
+          <div class="skill"><span style="min-width:130px;">Innovation Mgmt</span><div class="bar"><i style="width:88%; animation-delay: .4s;"></i></div></div>
+          <div class="skill"><span style="min-width:130px;">MEDDICC</span><div class="bar"><i style="width:90%; animation-delay: .5s;"></i></div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h4>Languages <span class="num">06</span></h4>
+        <div class="lang-list">
+          <div class="lang">
+            <span class="name">French</span>
+            <span class="lvl"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span>
+          </div>
+          <div class="lang">
+            <span class="name">English</span>
+            <span class="lvl"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span>
+          </div>
+          <div class="lang">
+            <span class="name">中文 · Chinese</span>
+            <span class="lvl"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span>
+          </div>
+          <div class="lang">
+            <span class="name">Español</span>
+            <span class="lvl"><span class="on y"></span><span class="on y"></span><span></span><span></span><span></span></span>
+          </div>
+          <div class="lang">
+            <span class="name">Italiano</span>
+            <span class="lvl"><span class="on y"></span><span class="on y"></span><span></span><span></span><span></span></span>
+          </div>
+          <div class="lang">
+            <span class="name">Deutsch</span>
+            <span class="lvl"><span class="on y"></span><span class="on y"></span><span></span><span></span><span></span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h4>Certifications <span class="num">04</span></h4>
+        <div class="cert-list">
+          <div class="cert">
+            <span class="ico"><i data-lucide="shield-check"></i></span>
+            <div><b>IBM Security QRadar</b><span>Sales Essentials</span></div>
+          </div>
+          <div class="cert">
+            <span class="ico"><i data-lucide="shield-check"></i></span>
+            <div><b>IBM Security QRadar</b><span>Technical Sales · Level 100</span></div>
+          </div>
+          <div class="cert">
+            <span class="ico"><i data-lucide="award"></i></span>
+            <div><b>Blue Core Coach</b><span>IBM</span></div>
+          </div>
+          <div class="cert">
+            <span class="ico"><i data-lucide="award"></i></span>
+            <div><b>Professional Digital Selling</b><span>Certificate</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-num">Section · 04<b>Formation</b></div>
+      <h2>From Paris to Shanghai, <em>by way of Dublin.</em></h2>
+    </div>
+
+    <div class="edu-grid">
+      <div></div>
+      <div class="edu-list">
+        <div class="edu">
+          <div>
+            <h3>National College of Ireland</h3>
+            <div class="deg"><em>Higher Diploma in Science</em> · Computing &amp; Cyber Security · 2.1 honours</div>
+          </div>
+          <div class="yr">2017 · 2018</div>
+        </div>
+        <div class="edu">
+          <div>
+            <h3>The American Business School of Paris</h3>
+            <div class="deg"><em>Bachelor of Business Administration</em> · International Finance</div>
+          </div>
+          <div class="yr">2008 · 2010</div>
+        </div>
+        <div class="edu">
+          <div>
+            <h3>Shanghai Tongji University</h3>
+            <div class="deg"><em>Mandarin Programme</em></div>
+          </div>
+          <div class="yr">Shanghai · CN</div>
+        </div>
+        <div class="edu">
+          <div>
+            <h3>Shanghai University of Finance &amp; Economics</h3>
+            <div class="deg"><em>BCT</em> · Chinese Language &amp; Literature</div>
+          </div>
+          <div class="yr">Shanghai · CN</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LET'S CONNECT / FOOTER -->
+  <footer class="footer">
+    <h2>Let's <em>connect</em><br/>if you're <b>building.</b></h2>
+    <div class="actions">
+      <a class="cta" href="mailto:ozultd@hotmail.com">
+        <i data-lucide="mail"></i> ozultd@hotmail.com
+      </a>
+      <a class="cta-ghost" href="https://www.linkedin.com/in/sebastienzekpa" target="_blank" rel="noopener">
+        <i data-lucide="linkedin-2"></i> /in/sebastienzekpa
+      </a>
+      <a class="cta-ghost" href="javascript:window.print()">
+        <i data-lucide="printer"></i> Save as PDF
+      </a>
+    </div>
+  </footer>
+
+  <div class="colophon">
+    <span>© 2026 · Sebastien Zekpa</span>
+    <span>Set in Space Grotesk &amp; IBM Plex Mono</span>
+    <span>Designed in Nveil's visual language</span>
+  </div>
+
+</div>
+
+<script>
+  if (window.lucide) lucide.createIcons();
+</script>
+
+</body>
+</html>
