@@ -116,6 +116,14 @@
     gap: 56px;
     padding: 72px 0 56px;
     align-items: end;
+    position: relative;
+  }
+  .hero > div { position: relative; z-index: 2; }
+  .hero-cloud {
+    position: absolute;
+    inset: -6% -4%;
+    z-index: 0;
+    pointer-events: none;
   }
   .hero .eyebrow {
     font-family: var(--font-mono);
@@ -872,6 +880,7 @@
     .footer .actions,
     .colophon,
     .hero .eyebrow .dot,
+    .hero-cloud,
     .spectrum-bar { display: none !important; }
 
     /* Page reset */
@@ -1181,6 +1190,7 @@
 
   <!-- HERO -->
   <section class="hero">
+    <canvas class="hero-cloud" aria-hidden="true"></canvas>
     <div>
       <div class="eyebrow">
         <span class="dot"></span>
@@ -1734,5 +1744,138 @@
   })();
 </script>
 
+<script>
+  /* ---- Live spectrum data-cloud (hero) ---- dependency-free, canvas 2D ---- */
+  (function () {
+    const canvas = document.querySelector('.hero-cloud');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const palette = [
+      [246,215,81],[244,159,73],[236,113,89],[229,31,128],
+      [190,52,142],[122,58,168],[31,81,171]
+    ];
+    const lerp = (a,b,t)=>a+(b-a)*t;
+    function colorAt(t){
+      t = Math.max(0, Math.min(1, t));
+      const x = t*(palette.length-1), i = Math.floor(x), f = x-i;
+      const c0 = palette[i], c1 = palette[Math.min(i+1, palette.length-1)];
+      return [lerp(c0[0],c1[0],f), lerp(c0[1],c1[1],f), lerp(c0[2],c1[2],f)];
+    }
+
+    let W=0,H=0,DPR=1, points=[];
+    const COUNT = reduce ? 360 : 900;
+
+    function build(){
+      points = [];
+      for(let i=0;i<COUNT;i++){
+        const u=Math.random(), v=Math.random();
+        const theta=u*Math.PI*2, phi=Math.acos(2*v-1);
+        const r=0.7+Math.random()*0.55;
+        const x=r*Math.sin(phi)*Math.cos(theta);
+        const y=r*Math.cos(phi);
+        const z=r*Math.sin(phi)*Math.sin(theta);
+        points.push({x,y,z, col: colorAt((y+1.25)/2.5)});
+      }
+    }
+    function resize(){
+      const rect = canvas.getBoundingClientRect();
+      W=rect.width; H=rect.height;
+      DPR=Math.min(window.devicePixelRatio||1, 2);
+      canvas.width=Math.max(1,W*DPR); canvas.height=Math.max(1,H*DPR);
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+
+    const mouse={px:-9999, py:-9999, x:0.5, y:0.5, active:false};
+    window.addEventListener('pointermove', e=>{
+      const rect=canvas.getBoundingClientRect();
+      mouse.px=e.clientX-rect.left; mouse.py=e.clientY-rect.top;
+      mouse.x=mouse.px/rect.width; mouse.y=mouse.py/rect.height;
+      mouse.active = mouse.px>=0 && mouse.px<=rect.width && mouse.py>=0 && mouse.py<=rect.height;
+    }, {passive:true});
+    window.addEventListener('blur', ()=>{ mouse.active=false; });
+
+    let rotY=0, rotX=0, running=false, t0=0;
+
+    function render(now){
+      const dt = Math.min(33, now-(t0||now)); t0=now;
+      rotY += (reduce?0:0.00010)*dt;
+      const yaw = rotY + (mouse.x-0.5)*0.6;
+      const pitchTarget = (mouse.y-0.5)*-0.4;
+      rotX += (pitchTarget-rotX)*0.05;
+      const cy=Math.cos(yaw), sy=Math.sin(yaw), cx=Math.cos(rotX), sx=Math.sin(rotX);
+
+      ctx.clearRect(0,0,W,H);
+      const cxp=W*0.5, cyp=H*0.5, scale=Math.min(W,H)*0.42, fov=2.4;
+      const proj=[];
+      for(let i=0;i<points.length;i++){
+        const p=points[i];
+        let x=p.x*cy - p.z*sy, z=p.x*sy + p.z*cy, y=p.y;
+        let y2=y*cx - z*sx, z2=y*sx + z*cx;
+        const persp=fov/(fov - z2);
+        proj.push({sx:cxp + x*scale*persp, sy:cyp + y2*scale*persp, depth:z2, persp, col:p.col, bright:0, lens:0});
+      }
+
+      const R=Math.min(W,H)*0.18, near=[];
+      for(let i=0;i<proj.length;i++){
+        const q=proj[i];
+        let bright = 0.5 + 0.5*((q.depth+1.25)/2.5);
+        if(mouse.active){
+          const dx=q.sx-mouse.px, dy=q.sy-mouse.py, d=Math.hypot(dx,dy);
+          if(d<R){
+            const f=1-d/R;
+            q.sx += (dx/(d||1))*f*f*26;
+            q.sy += (dy/(d||1))*f*f*26;
+            bright = Math.min(1, bright+f*0.7);
+            q.lens=f; if(near.length<140) near.push(q);
+          }
+        }
+        q.bright=bright;
+      }
+
+      if(near.length>1){
+        const maxd=R*0.55, maxd2=maxd*maxd;
+        for(let i=0;i<near.length;i++){
+          for(let j=i+1;j<near.length;j++){
+            const a=near[i], b=near[j];
+            const dx=a.sx-b.sx, dy=a.sy-b.sy, d2=dx*dx+dy*dy;
+            if(d2<maxd2){
+              const al=(1-Math.sqrt(d2)/maxd)*0.20*Math.min(a.lens,b.lens);
+              if(al>0.012){
+                ctx.strokeStyle='rgba(229,31,128,'+al.toFixed(3)+')';
+                ctx.lineWidth=1; ctx.beginPath();
+                ctx.moveTo(a.sx,a.sy); ctx.lineTo(b.sx,b.sy); ctx.stroke();
+              }
+            }
+          }
+        }
+      }
+
+      proj.sort((a,b)=>a.depth-b.depth);
+      for(let i=0;i<proj.length;i++){
+        const q=proj[i];
+        const size=Math.max(0.6, q.persp*1.3*(0.6+(q.depth+1.25)/2.5*0.8));
+        const a=0.12 + q.bright*0.55;
+        ctx.fillStyle='rgba('+(q.col[0]|0)+','+(q.col[1]|0)+','+(q.col[2]|0)+','+a.toFixed(3)+')';
+        ctx.beginPath(); ctx.arc(q.sx,q.sy,size,0,6.2832); ctx.fill();
+      }
+
+      if(running && !reduce) requestAnimationFrame(render);
+    }
+
+    function start(){ if(running||reduce) return; running=true; t0=0; requestAnimationFrame(render); }
+    function stop(){ running=false; }
+
+    build(); resize();
+    let rt; window.addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(()=>{ resize(); if(reduce) render(performance.now()); }, 150); });
+
+    if(reduce){ render(performance.now()); return; }
+    const io=new IntersectionObserver(es=>{ es.forEach(e=> e.isIntersecting ? start() : stop()); }, {threshold:0});
+    io.observe(canvas);
+    document.addEventListener('visibilitychange', ()=>{ document.hidden ? stop() : start(); });
+    start();
+  })();
+</script>
 </body>
 </html>
