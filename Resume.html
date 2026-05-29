@@ -903,6 +903,56 @@
     .opmap-legend { color: #ffffff !important; }
   }
 
+  /* ---------- Ask my CV (local chat assistant) ---------- */
+  .askcv-launch { position: fixed; right: 24px; bottom: 24px; z-index: 940; display: inline-flex; align-items: center; gap: 10px; padding: 13px 20px 13px 16px; border: none; border-radius: 999px; cursor: pointer; font-family: var(--font-display); font-weight: 600; font-size: 15px; color: #fff; background: linear-gradient(135deg, var(--accent-pink), var(--accent-orange)); box-shadow: 0 10px 30px -8px rgba(229,31,128,0.6), inset 0 0 0 1px rgba(255,255,255,0.08); transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+  .askcv-launch:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 16px 40px -10px rgba(229,31,128,0.7); }
+  .askcv-launch svg { width: 20px; height: 20px; }
+  .askcv-ping { position: absolute; top: -3px; right: -3px; width: 12px; height: 12px; border-radius: 999px; background: var(--accent-yellow); box-shadow: 0 0 0 3px var(--bg-night); animation: askcv-ping 2.4s var(--ease-out) infinite; }
+  @keyframes askcv-ping { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: .55; } }
+  @media (max-width: 560px) { .askcv-launch .askcv-launch-label { display: none; } .askcv-launch { padding: 14px; } }
+
+  .askcv-panel { position: fixed; right: 24px; bottom: 24px; z-index: 980; width: 380px; max-width: calc(100vw - 32px); height: 560px; max-height: calc(100vh - 48px); display: flex; flex-direction: column; background: rgba(20,17,42,0.93); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid var(--border-2); border-radius: 20px; box-shadow: 0 30px 70px -20px rgba(0,0,0,0.75), 0 0 0 1px rgba(229,31,128,0.12); overflow: hidden; }
+  .askcv-panel[hidden] { display: none; }
+  .askcv-panel.opening { animation: askcv-in 260ms var(--ease-out); }
+  @keyframes askcv-in { from { opacity: 0; transform: translateY(16px) scale(0.96); } to { opacity: 1; transform: none; } }
+  .askcv-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--border-1); background: rgba(255,255,255,0.02); }
+  .askcv-id { display: flex; align-items: center; gap: 10px; }
+  .askcv-avatar { width: 38px; height: 38px; border-radius: 999px; display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; font-size: 14px; color: #fff; background: linear-gradient(135deg, var(--accent-pink), var(--accent-violet)); box-shadow: var(--shadow-glow-pink); }
+  .askcv-id b { font-family: var(--font-display); font-size: 15px; color: #fff; display: block; line-height: 1.15; }
+  .askcv-status { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); display: flex; align-items: center; gap: 6px; }
+  .askcv-status i { width: 7px; height: 7px; border-radius: 999px; background: var(--success); box-shadow: 0 0 8px var(--success); }
+  .askcv-close { background: none; border: none; color: var(--fg-3); font-size: 17px; cursor: pointer; width: 32px; height: 32px; border-radius: 999px; transition: background var(--dur-base), color var(--dur-base); }
+  .askcv-close:hover { background: rgba(255,255,255,0.06); color: #fff; }
+
+  .askcv-log { flex: 1; overflow-y: auto; padding: 18px 16px; display: flex; flex-direction: column; gap: 12px; scrollbar-width: thin; scrollbar-color: var(--accent-pink) transparent; }
+  .askcv-log::-webkit-scrollbar { width: 6px; }
+  .askcv-log::-webkit-scrollbar-thumb { background: var(--accent-pink); border-radius: 3px; }
+  .askcv-msg { max-width: 86%; padding: 11px 14px; border-radius: 14px; font-family: var(--font-display); font-size: 14px; line-height: 1.5; }
+  .askcv-msg.bot { align-self: flex-start; background: rgba(255,255,255,0.05); border: 1px solid var(--border-1); color: var(--fg-1); border-bottom-left-radius: 5px; }
+  .askcv-msg.user { align-self: flex-end; background: linear-gradient(135deg, rgba(229,31,128,0.92), rgba(190,52,142,0.92)); color: #fff; border-bottom-right-radius: 5px; }
+  .askcv-msg b { color: #fff; font-weight: 600; }
+  .askcv-msg a { color: var(--accent-orange); text-decoration: underline; }
+  .askcv-chips { display: flex; flex-wrap: wrap; gap: 7px; align-self: flex-start; max-width: 100%; }
+  .askcv-chip { font-family: var(--font-display); font-size: 12.5px; color: var(--fg-1); background: rgba(229,31,128,0.10); border: 1px solid var(--border-accent); border-radius: 999px; padding: 7px 12px; cursor: pointer; transition: background var(--dur-base), transform var(--dur-base); }
+  .askcv-chip:hover { background: rgba(229,31,128,0.22); transform: translateY(-1px); }
+  .askcv-typing { display: inline-flex; gap: 4px; }
+  .askcv-typing span { width: 7px; height: 7px; border-radius: 999px; background: var(--fg-3); animation: askcv-blink 1.2s infinite; }
+  .askcv-typing span:nth-child(2) { animation-delay: .2s; }
+  .askcv-typing span:nth-child(3) { animation-delay: .4s; }
+  @keyframes askcv-blink { 0%,60%,100% { opacity: .25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+
+  .askcv-input { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--border-1); background: rgba(255,255,255,0.02); }
+  .askcv-input input { flex: 1; min-width: 0; background: rgba(255,255,255,0.05); border: 1px solid var(--border-2); border-radius: 999px; padding: 11px 16px; color: #fff; font-family: var(--font-display); font-size: 14px; outline: none; transition: border-color var(--dur-base); }
+  .askcv-input input:focus { border-color: var(--accent-pink); }
+  .askcv-input input::placeholder { color: var(--fg-3); }
+  .askcv-input button { width: 42px; height: 42px; flex-shrink: 0; border: none; border-radius: 999px; background: linear-gradient(135deg, var(--accent-pink), var(--accent-orange)); color: #fff; cursor: pointer; display: grid; place-items: center; transition: transform var(--dur-base); }
+  .askcv-input button:hover { transform: scale(1.06); }
+  .askcv-input button svg { width: 17px; height: 17px; }
+  .askcv-foot { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-4); text-align: center; padding: 0 0 10px; }
+
+  @media (prefers-reduced-motion: reduce) { .askcv-panel.opening { animation: none; } .askcv-ping { animation: none; } .askcv-typing span { animation: none; } }
+  @media print { .askcv-launch, .askcv-panel { display: none !important; } }
+
   /* ---------- Print ---------- */
   @page { size: A4; margin: 14mm 12mm; }
   @media print {
@@ -1978,5 +2028,190 @@
     start();
   })();
 </script>
+
+  <!-- ASK MY CV (local chat assistant) -->
+  <button class="askcv-launch" id="askcvLaunch" aria-label="Ask my CV - open chat assistant" aria-expanded="false">
+    <span class="askcv-ping" aria-hidden="true"></span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    <span class="askcv-launch-label">Ask my CV</span>
+  </button>
+  <section class="askcv-panel" id="askcvPanel" role="dialog" aria-label="Ask my CV - chat assistant about Sebastien Zekpa" hidden>
+    <header class="askcv-head">
+      <div class="askcv-id">
+        <span class="askcv-avatar" aria-hidden="true">SZ</span>
+        <div>
+          <b>Ask my CV</b>
+          <span class="askcv-status"><i aria-hidden="true"></i>Resume assistant</span>
+        </div>
+      </div>
+      <button class="askcv-close" id="askcvClose" aria-label="Close chat">&#10005;</button>
+    </header>
+    <div class="askcv-log" id="askcvLog" role="log" aria-live="polite"></div>
+    <form class="askcv-input" id="askcvForm" autocomplete="off">
+      <input id="askcvText" type="text" placeholder="Ask about Sebastien&#8230;" aria-label="Type your question about Sebastien" />
+      <button type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </form>
+    <div class="askcv-foot">Runs locally in your browser &middot; no data leaves this page</div>
+  </section>
+
+  <script>
+  (function () {
+    var launch = document.getElementById("askcvLaunch");
+    var panel  = document.getElementById("askcvPanel");
+    var closeB = document.getElementById("askcvClose");
+    var log    = document.getElementById("askcvLog");
+    var form   = document.getElementById("askcvForm");
+    var input  = document.getElementById("askcvText");
+    if (!launch || !panel) return;
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var STARTERS = ["What is Nveil?", "How much has he raised?", "Where has he sold?", "What is his background?"];
+
+    var KB = [
+      {id:"about", kw:["about","who","bio","summary","overview","profile","sebastien","zekpa","introduce","yourself"],
+       a:"Sebastien Zekpa is the <b>CEO &amp; Founder of Nveil</b>, a deeptech AI startup in Grenoble, France. Before Nveil he spent <b>10+ years in enterprise SaaS</b> sales and leadership at IBM, Pluralsight and BigID, closing 30+ deals across 10+ EU markets. He has raised <b>&euro;500K+ non-dilutive</b> for Nveil and speaks French, English and Chinese.",
+       rel:["What is Nveil?","How much has he raised?","What is his sales track record?"]},
+      {id:"nveil", kw:["nveil","company","startup","product","platform","building","build","founded","do now","what is nveil"],
+       a:"<b>Nveil</b> is an AI platform that turns any dataset into interactive <b>3D visualizations</b> &mdash; no code, no configuration, no training. Sebastien founded it in December 2023 to close the gap between raw data and real understanding, serving data leaders in <b>pharma, life sciences and regulated industries</b>. More at <a href='https://nveil.com' target='_blank' rel='noopener'>nveil.com</a>.",
+       rel:["How much has he raised?","Which industries does it serve?","What AI tools does he use?"]},
+      {id:"funding", kw:["raise","raised","funding","fund","fundraising","money","capital","investor","investors","vc","grant","grants","bpifrance","dilutive"],
+       a:"For Nveil, Sebastien has raised <b>&euro;500K+ in non-dilutive funding</b> &mdash; from <b>Bpifrance, Cr&eacute;dit Agricole Innovation and GAIA</b> &mdash; and built the founding team in Grenoble, taking the platform from concept to live product in 24 months. Nveil was also accepted into <b>Google for Startups</b> and <b>NVIDIA Inception</b>.",
+       rel:["What is Nveil?","What partnerships does he have?","What is his background?"]},
+      {id:"role", kw:["current","now","today","role","title","position","job","doing"],
+       a:"Since <b>December 2023</b> he is <b>CEO &amp; Founder of Nveil</b> in Grenoble. He leads product, go-to-market, fundraising and hiring, and is building enterprise pipeline across EMEA and the US with early traction in pharma.",
+       rel:["What is Nveil?","How much has he raised?","What is his background?"]},
+      {id:"experience", kw:["experience","background","career","history","worked","journey","past","roles","cv","resume","employment"],
+       a:"Sebastien's career, most recent first:<br>&bull; <b>Nveil</b> &mdash; CEO &amp; Founder (2023&ndash;now)<br>&bull; <b>BigID</b> &mdash; Regional Sales Manager, Southern Europe (2022&ndash;2023)<br>&bull; <b>Pluralsight</b> &mdash; Senior Sales Manager, Southern Europe (2021&ndash;2022)<br>&bull; <b>IBM</b> &mdash; Sales Specialist &amp; EMEA Cybersecurity Team Lead (2015&ndash;2021)<br>&bull; <b>Eglobaltalent</b> &mdash; Founder (2014&ndash;2015)<br>&bull; <b>Md7</b> &mdash; Consultant &amp; BizDev EMEA (2012&ndash;2014)",
+       rel:["Tell me about IBM","Tell me about BigID","What did he do at Pluralsight?"]},
+      {id:"bigid", kw:["bigid","big id","privacy","governance","discovery"],
+       a:"At <b>BigID</b> (2022&ndash;2023) he was Regional Sales Manager for Southern Europe &mdash; enterprise SaaS for big-data discovery, security, governance and privacy across financial services, retail, oil &amp; gas and telecom. He owned territory quota, built pipeline via SDRs, events and outbound, recruited resellers and ran joint marketing, using MEDDICC.",
+       rel:["Tell me about IBM","What markets has he sold in?","What is MEDDICC?"]},
+      {id:"pluralsight", kw:["pluralsight","plural"],
+       a:"At <b>Pluralsight</b> (2021&ndash;2022, Dublin) he was Senior Sales Manager for Southern Europe, managing a team of 6 senior AEs/AMs across France, Italy, Spain and Portugal. He <b>delivered 100% of team ACV quota ($6M)</b> across new logo, expansion and renewals, and hired, coached and retained top reps.",
+       rel:["Tell me about IBM","How big were his teams?","Tell me about BigID"]},
+      {id:"ibm", kw:["ibm","cybersecurity","cyber","security","siem","iam","qradar","maas360"],
+       a:"At <b>IBM</b> (2015&ndash;2021, Dublin) he held three roles, rising to <b>Sales Specialist &amp; EMEA Cybersecurity Team Lead</b>. He <b>led a multi-country team to $12M+ ACV per year</b>, consistently exceeding target across France, SPGI, Benelux, Nordics, Italy and CEE &mdash; selling SIEM, vulnerability management, IAM and MDM/UEM.",
+       rel:["What did he do at Pluralsight?","What markets has he sold in?","What certifications does he hold?"]},
+      {id:"gtm", kw:["gtm","go to market","sales","sell","sold","selling","market","markets","countries","deal","deals","revenue","quota","pipeline","close","closed","track record"],
+       a:"He has run <b>full-cycle GTM across 10+ EU markets</b> &mdash; France, Italy, Spain, Portugal, Greece, Benelux, Nordics and CEE &mdash; and closed <b>30+ enterprise deals</b> in cybersecurity, governance and analytics, with <b>MEDDICC</b> discipline. Highlights: 100% of team ACV quota ($6M) at Pluralsight; a $12M+ ACV/yr team at IBM.",
+       rel:["Tell me about IBM","What is MEDDICC?","Which industries has he sold into?"]},
+      {id:"meddicc", kw:["meddicc","methodology","method","qualification"],
+       a:"<b>MEDDICC</b> is the enterprise sales qualification framework Sebastien runs his deals with &mdash; Metrics, Economic buyer, Decision criteria, Decision process, Identify pain, Champion, Competition. It underpins his 30+ enterprise closes.",
+       rel:["What is his sales track record?","Tell me about IBM","What are his skills?"]},
+      {id:"skills", kw:["skill","skills","strength","strengths","expertise","specialties","good at","superpower"],
+       a:"Core strengths: <b>Start-up Leadership, Fundraising, GTM &amp; Sales, Data Viz / AI, Innovation Management</b> and <b>MEDDICC</b> &mdash; a rare blend of enterprise commercial mastery and hands-on founder execution.",
+       rel:["Why should we hire him?","What tools does he use?","What is his background?"]},
+      {id:"languages", kw:["language","languages","speak","speaks","spoken","french","english","chinese","mandarin","multilingual"],
+       a:"Sebastien speaks <b>French</b> (native), <b>English</b> (fluent) and <b>Chinese / Mandarin</b> (conversational) &mdash; he studied Mandarin in Shanghai. That trilingual, cross-cultural range underpins his work across EU and global markets.",
+       rel:["Where is he based?","What did he study?","What is his background?"]},
+      {id:"education", kw:["education","study","studied","school","university","degree","college","academic","formation"],
+       a:"Education:<br>&bull; <b>National College of Ireland</b> &mdash; Higher Diploma, Computing &amp; Cyber Security (2017&ndash;2018)<br>&bull; <b>American Business School of Paris</b> &mdash; BBA, International Finance (2008&ndash;2010)<br>&bull; <b>Shanghai Tongji University</b> &mdash; Mandarin Programme<br>&bull; <b>Shanghai University of Finance &amp; Economics</b> &mdash; Chinese Language &amp; Literature",
+       rel:["What languages does he speak?","What certifications does he hold?","What is his background?"]},
+      {id:"certs", kw:["certification","certifications","certificate","certified","credentials"],
+       a:"Certifications: <b>IBM Security QRadar &mdash; Sales Essentials</b>; <b>IBM Security QRadar &mdash; Technical Sales (L100)</b>; <b>Blue Core Coach</b> (IBM); and <b>Professional Digital Selling</b>.",
+       rel:["Tell me about IBM","What did he study?","What are his skills?"]},
+      {id:"stack", kw:["tool","tools","stack","tech","technology","software","uses","using"],
+       a:"His working toolkit:<br>&bull; <b>AI / Agents</b> &mdash; Claude, Notion AI, Zapier, GitHub Copilot, Make, OpenRouter, ElevenLabs<br>&bull; <b>GTM &amp; Growth</b> &mdash; HubSpot, Apollo, Lemlist, Mailchimp, Salesforce, G2, Similarweb<br>&bull; <b>Ops &amp; Build</b> &mdash; Notion, Figma, Webflow, ClickUp, Resend, GitHub",
+       rel:["What is Nveil?","What are his skills?","What is MEDDICC?"]},
+      {id:"industries", kw:["industry","industries","vertical","verticals","sector","sectors","customers","clients","pharma","life sciences","healthcare","regulated"],
+       a:"Nveil focuses on <b>pharma, life sciences and other regulated industries</b>. Across his wider career he has also sold into <b>financial services, retail, oil &amp; gas and telecommunications</b>.",
+       rel:["What is Nveil?","What markets has he sold in?","Tell me about BigID"]},
+      {id:"speaking", kw:["speaker","speaking","keynote","talk","talks","event","events","conference","stage","panel","vivatech","gitex","jensen","huang","clara","chappaz"],
+       a:"Sebastien is an active speaker. Recent moments: <b>Go Entrepreneurs Lyon 2025</b> (Stage 1 panelist), <b>Institut Carnot LSI</b>, <b>VivaTech</b> (where he met NVIDIA CEO Jensen Huang), <b>GITEX Berlin</b>, <b>Pavillon France</b>, and meeting <b>Clara Chappaz</b>, France's Minister Delegate for AI. He has 4,400+ LinkedIn followers.",
+       rel:["What partnerships does he have?","What is Nveil?","How can I contact him?"]},
+      {id:"partnerships", kw:["partnership","partnerships","program","programs","nvidia","inception","google","minalogic","accelerator","ecosystem"],
+       a:"Nveil has been accepted into <b>Google for Startups</b> and <b>NVIDIA Inception</b> &mdash; unlocking cloud credits, GPU access and ecosystem visibility &mdash; and is active in French deeptech programs including <b>Minalogic</b>.",
+       rel:["How much has he raised?","What is Nveil?","What events has he spoken at?"]},
+      {id:"location", kw:["where","located","location","based","live","lives","city","grenoble","france","relocate","remote"],
+       a:"He is based in <b>Grenoble, France</b>. He is deeply international, though &mdash; around 9 years in <b>Dublin</b> (IBM, Pluralsight, Eglobaltalent) plus time studying in <b>Shanghai</b> and <b>Paris</b>.",
+       rel:["What languages does he speak?","How can I contact him?","What is his background?"]},
+      {id:"contact", kw:["contact","reach","email","linkedin","hire","hiring","connect","touch","message"],
+       a:"You can reach Sebastien at <a href='mailto:ozultd@hotmail.com'>ozultd@hotmail.com</a>, on <a href='https://www.linkedin.com/in/sebastienzekpa' target='_blank' rel='noopener'>LinkedIn</a>, or via <a href='https://nveil.com' target='_blank' rel='noopener'>nveil.com</a>. He is based in Grenoble, France.",
+       rel:["Why should we hire him?","What is Nveil?","What is his background?"]},
+      {id:"leadership", kw:["leadership","lead","manage","management","manager","team","teams","people"],
+       a:"He has built and led teams across borders: <b>6 senior AEs/AMs at Pluralsight</b> (Southern Europe) and a <b>multi-country cybersecurity team at IBM</b> ($12M+ ACV/yr across France, SPGI, Benelux, Nordics, Italy, CEE) &mdash; hiring, coaching and retaining top talent. As a founder he recruited Nveil's founding team in Grenoble.",
+       rel:["Tell me about IBM","What did he do at Pluralsight?","Why should we hire him?"]},
+      {id:"why", kw:["why","hire","impress","best","fit","choose","value","stand out","special"],
+       a:"Because he pairs a decade of <b>enterprise SaaS GTM mastery</b> (MEDDICC, 30+ deals, 10+ markets, $12M+ ACV teams) with genuine <b>founder grit</b> &mdash; raising non-dilutive capital, recruiting a team and shipping a deeptech AI product from zero. Commercial and technical, trilingual, equally at home on stage and in the boardroom.",
+       rel:["How much has he raised?","What is his sales track record?","How can I contact him?"]}
+    ];
+
+    var FALLBACK = {
+      a:"I am not sure about that one &mdash; but I can tell you about Sebastien's role at <b>Nveil</b>, his <b>fundraising</b>, <b>GTM track record</b>, <b>experience</b>, <b>skills</b>, <b>languages</b> or <b>education</b>. Try one of these:",
+      rel:["What is Nveil?","How much has he raised?","What is his background?","How can I contact him?"]
+    };
+    var STOP = {"the":1,"a":1,"an":1,"is":1,"are":1,"do":1,"does":1,"did":1,"you":1,"your":1,"he":1,"his":1,"him":1,"what":1,"which":1,"who":1,"how":1,"tell":1,"me":1,"about":1,"of":1,"in":1,"on":1,"at":1,"to":1,"and":1,"or":1,"for":1,"with":1,"have":1,"has":1,"had":1,"was":1,"were":1,"i":1,"can":1,"could":1,"would":1,"will":1,"please":1,"any":1,"give":1,"show":1,"that":1,"this":1,"it":1,"as":1,"from":1,"more":1,"also":1,"really":1,"want":1,"there":1,"some":1};
+
+    function norm(s){ return (s||"").toLowerCase().replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim(); }
+    function toks(s){ return norm(s).split(" ").filter(function(w){ return w && !STOP[w]; }); }
+
+    function score(qn, qt, topic){
+      var s = 0, i, k, t;
+      for(i=0;i<topic.kw.length;i++){
+        k = topic.kw[i];
+        if(k.indexOf(" ") !== -1){ if(qn.indexOf(k) !== -1) s += 3; }
+        else {
+          for(t=0;t<qt.length;t++){
+            if(qt[t] === k) s += 2;
+            else if(qt[t].length>3 && k.length>3 && (qt[t].indexOf(k)!==-1 || k.indexOf(qt[t])!==-1)) s += 1;
+          }
+        }
+      }
+      return s;
+    }
+
+    var greetRe = /^(hi|hello|hey|yo|hiya|sup|hallo|bonjour|salut|good (morning|afternoon|evening))\b/;
+    var thankRe = /(thank|thanks|thx|merci|cheers|awesome|perfect|nice work|great job)/;
+
+    function answer(q){
+      var qn = norm(q), qt = toks(q);
+      var best = null, bestS = 0, i, sc;
+      for(i=0;i<KB.length;i++){ sc = score(qn, qt, KB[i]); if(sc > bestS){ bestS = sc; best = KB[i]; } }
+      if(best && bestS >= 2) return best;
+      if(greetRe.test(qn)) return {a:"Hi! &#128075; Ask me anything about Sebastien &mdash; his role at <b>Nveil</b>, fundraising, sales track record, skills, languages and more. Tap a suggestion or type a question.", rel:STARTERS};
+      if(thankRe.test(qn)) return {a:"You are welcome! Anything else you would like to know about Sebastien?", rel:["What is his background?","Why should we hire him?","How can I contact him?"]};
+      if(best && bestS >= 1) return best;
+      return FALLBACK;
+    }
+
+    function scrollDown(){ log.scrollTop = log.scrollHeight; }
+    function addBot(html){ var d=document.createElement("div"); d.className="askcv-msg bot"; d.innerHTML=html; log.appendChild(d); scrollDown(); return d; }
+    function addUser(text){ var d=document.createElement("div"); d.className="askcv-msg user"; d.textContent=text; log.appendChild(d); scrollDown(); }
+    function addChips(arr){
+      if(!arr || !arr.length) return;
+      var c=document.createElement("div"); c.className="askcv-chips";
+      arr.forEach(function(q){ var b=document.createElement("span"); b.className="askcv-chip"; b.textContent=q; b.addEventListener("click", function(){ submit(q); }); c.appendChild(b); });
+      log.appendChild(c); scrollDown();
+    }
+    function showTyping(){ var d=document.createElement("div"); d.className="askcv-msg bot"; d.innerHTML='<span class="askcv-typing"><span></span><span></span><span></span></span>'; log.appendChild(d); scrollDown(); return d; }
+
+    function submit(q){
+      q = (q||"").trim(); if(!q) return;
+      addUser(q); input.value="";
+      var t = showTyping();
+      var ans = answer(q);
+      var delay = reduce ? 0 : 380;
+      setTimeout(function(){ if(t && t.parentNode) t.parentNode.removeChild(t); addBot(ans.a); addChips(ans.rel); }, delay);
+    }
+
+    var started = false;
+    function open(){
+      panel.hidden = false; panel.classList.add("opening");
+      launch.hidden = true; launch.setAttribute("aria-expanded","true");
+      if(!started){
+        started = true;
+        addBot("&#128075; Hi! I am Sebastien's resume assistant. Ask me anything about his experience, fundraising, GTM, skills &mdash; or tap a suggestion below.");
+        addChips(STARTERS);
+      }
+      setTimeout(function(){ input.focus(); }, reduce?0:120);
+    }
+    function close(){ panel.hidden = true; panel.classList.remove("opening"); launch.hidden = false; launch.setAttribute("aria-expanded","false"); launch.focus(); }
+
+    launch.addEventListener("click", open);
+    closeB.addEventListener("click", close);
+    form.addEventListener("submit", function(e){ e.preventDefault(); submit(input.value); });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !panel.hidden) close(); });
+  })();
+  </script>
 </body>
 </html>
